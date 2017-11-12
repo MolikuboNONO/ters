@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#titleB {
+				background: url(img/25.jpg);
+			}
+			
+			.div1 {
+				position: relative;
+				width: 300px;
+				height: 300px;
+				left: 130px;
+				top: 350px;
+				float: left;
+				overflow: hidden;
+				display: inline-block;
+				border-radius: 20%;
+				margin: 10px;
+			}
+			
+			#hintB {
+				background: url(img/dott.png) repeat;
+				width: 300px;
+				height: 300px;
+				position: absolute;
+				top: -300px;
+				left: 0;
+			}
+			
+			#hintB>p {
+				font-size: 90px;
+				text-align: center;
+				font-style: initial;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body id="titleB">
+		<div class="div1" style="background: lavender;">
+			<div id="hintB">
+				<p>START</p>
+			</div>
+		</div>
+		<div class="div1" style="background:lightblue;">
+			<div id="hintB">
+				<p>HOW?</p>
+			</div>
+		</div>
+		<div class="div1" style="background: plum;">
+			<div id="hintB">
+				<p>SCORE</p>
+			</div>
+		</div>
+		<div class="div1" style="background: lightcoral;">
+			<div id="hintB">
+				<p>4</p>
+			</div>
+
+		</div>
+		<script src="js/motion.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				var k = 0;
+				var myDiv = document.getElementsByClassName('div1');
+
+				var movein = function(e) {
+					var aDiv = this.getElementsByTagName('div');
+					var w = this.offsetWidth;
+					var h = this.offsetHeight;
+					console.log(k);
+					var x = (e.clientX - this.offsetLeft - (w / 2)) * (w > h ? (h / w) : 1);
+					var y = (e.clientY - this.offsetTop - (h / 2)) * (h > w ? (w / h) : 1);
+					var dir = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+					var eventType = e.type;
+					var dirName = new Array('top', 'right', 'bottom', 'left');
+					if(e.type == 'mouseenter') {
+						this.style.transform = 'rotateY(' + 360 + 'deg) 1s'
+						actDir(aDiv[k], dirName[dir]);
+					} else if(e.type == 'mouseleave') {
+						actDir(aDiv[k], 'back');
+					}
+				}
+
+				function actDir(aDiv, attr) {
+					var type = attr;
+
+					switch(type) {
+						case 'left':
+							aDiv.style.left = -300 + 'px';
+							aDiv.style.top = 0 + 'px';
+							elasticMove({
+								obj: aDiv,
+								attr: 'left',
+								target: 0
+							});
+
+							break;
+						case 'top':
+							aDiv.style.left = 0 + 'px';
+							aDiv.style.top = -300 + 'px';
+							elasticMove({
+								obj: aDiv,
+								attr: 'top',
+								target: 0
+							});
+							break
+						case 'right':
+							aDiv.style.left = 300 + 'px';
+							aDiv.style.top = 0 + 'px';
+							elasticMove({
+								obj: aDiv,
+								attr: 'left',
+								target: 0
+							});
+							break;
+						case 'bottom':
+							aDiv.style.top = 300 + 'px';
+							elasticMove({
+								obj: aDiv,
+								attr: 'top',
+								target: 0
+							});
+							break;
+						case 'back':							
+								aDiv.style.left = 300 + 'px';
+								aDiv.style.top = 0 + 'px';
+							break;
+
+						default:
+							break;
+					}
+				}
+
+				for(var i = 0; i < myDiv.length; i++) {
+					if(window.addEventListener) {
+						myDiv[i].addEventListener('mouseenter', movein, false);
+						myDiv[i].addEventListener('mouseleave', movein, false);
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>
